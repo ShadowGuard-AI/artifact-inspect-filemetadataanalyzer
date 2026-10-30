@@ -92,21 +92,20 @@ def analyze_file_metadata(filepath, threshold_days=30, expected_owner=None, expe
         if expected_owner and str(owner_uid) != expected_owner:
             logging.warning(f"  [ANOMALY] Owner UID ({owner_uid}) does not match expected owner ({expected_owner}).")
 
-        if expected_permissions and permissions != expected_permissions:
+        # stat.filemode returns ten characters including the file type
+        # ('-rw-r--r--'), while callers pass the nine permission characters
+        # the help text shows ('rw-r--r--'). Comparing the two spellings
+        # directly flagged every correct file, so accept either form.
+        if expected_permissions and expected_permissions not in (permissions, permissions[1:]):
             logging.warning(f"  [ANOMALY] Permissions ({permissions}) do not match expected permissions ({expected_permissions}).")
 
-    except FileNotFoundError as e:
-        logging.error(f"File not found: {e}")
-        return
-    except PermissionError as e:
-        logging.error(f"Permission error: {e}")
-        return
-    except OSError as e:
-        logging.error(f"OS error: {e}")
-        return
+    except (FileNotFoundError, PermissionError, OSError, ValueError, TypeError) as e:
+        logging.error(f"Could not analyze file metadata: {e}")
+        return False
     except Exception as e:
         logging.error(f"An unexpected error occurred: {e}")
-        return
+        return False
+    return True
 
 
 def analyze_pe_metadata(filepath):
@@ -139,9 +138,14 @@ def analyze_pe_metadata(filepath):
             logging.info(f"    Size of Raw Data: 0x{section.SizeOfRawData:x}")
             logging.info(f"    Characteristics: 0x{section.Characteristics:x}")
 
-            if section.SizeOfRawData == 0 and section.Characteristics & 0x40000040:  # CODE and EXECUTE
+            # The bit values matter here and the old masks did not match
+            # their labels: 0x40000040 is initialised data plus MEM_READ,
+            # not code plus execute, and 0x20000000 is MEM_EXECUTE, not
+            # MEM_WRITE (0x80000000). Both checks now test the bits their
+            # messages name.
+            if section.SizeOfRawData == 0 and section.Characteristics & 0x20000020 == 0x20000020:
                 logging.warning("  [ANOMALY] Section with no raw data but marked as CODE and EXECUTABLE.")
-            if ".text" not in section_name.lower() and section.Characteristics & 0x20000000:  # MEM_WRITE
+            if ".text" not in section_name.lower() and section.Characteristics & 0x80000000:
                 logging.warning("  [ANOMALY] Section marked as WRITEABLE but not named '.text'.")
 
         # Check for imports from known malicious DLLs
@@ -180,7 +184,12 @@ def main():
     """
     args = setup_argparse()
 
-    analyze_file_metadata(args.filepath, args.threshold, args.owner, args.permissions)
+    # Analysis helpers print their own errors; main owns the exit code, so
+    # a missing input file no longer exits 0.
+    import sys
+    ok = analyze_file_metadata(args.filepath, args.threshold, args.owner, args.permissions)
+    if not ok:
+        sys.exit(1)
 
     if args.pe_check:
         analyze_pe_metadata(args.filepath)
