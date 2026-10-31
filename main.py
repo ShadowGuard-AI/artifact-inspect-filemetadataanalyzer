@@ -16,7 +16,10 @@ def setup_argparse():
     parser = argparse.ArgumentParser(description="Analyzes file metadata and flags anomalies.")
     parser.add_argument("filepath", help="Path to the file to analyze.")
     parser.add_argument("-t", "--threshold", type=int, default=30,
-                        help="Threshold in days for flagging old modification/creation dates. Defaults to 30 days.")
+                        help="Threshold in days for flagging old dates. The modification date is always checked. "
+                             "The creation date is checked only where the platform provides a real birth time "
+                             "(st_birthtime, for example on macOS); on Linux st_ctime is a change time, not a "
+                             "birth time, so no creation age is checked there. Defaults to 30 days.")
     parser.add_argument("-o", "--owner", type=str,
                         help="Expected owner of the file. Flags if different.")
     parser.add_argument("-p", "--permissions", type=str,
@@ -32,7 +35,10 @@ def analyze_file_metadata(filepath, threshold_days=30, expected_owner=None, expe
 
     Args:
         filepath (str): Path to the file.
-        threshold_days (int): Threshold in days for flagging old modification/creation dates.
+        threshold_days (int): Threshold in days for flagging old dates. The modification
+            date is always checked. The creation date is checked only when a real
+            birth time (st_birthtime) is available; st_ctime is never used as a
+            creation time, because on Linux it is the inode change time.
         expected_owner (str): Expected owner of the file.
         expected_permissions (str): Expected permissions of the file (e.g., 'rwxr-xr--').
     """
@@ -52,9 +58,18 @@ def analyze_file_metadata(filepath, threshold_days=30, expected_owner=None, expe
         # Get file stats
         stat_info = os.stat(filepath)
 
-        # Creation date (platform-dependent, often not reliable)
-        creation_time = stat_info.st_ctime
-        creation_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(creation_time))
+        # Creation (birth) time exists only where the platform provides one
+        # as st_birthtime. st_ctime is not a creation time: on Linux it is
+        # the inode change time, so it is reported under its own name and is
+        # never threshold checked as a creation date.
+        birth_time = getattr(stat_info, "st_birthtime", None)
+        creation_date = None
+        if birth_time is not None:
+            creation_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(birth_time))
+
+        # Change date (st_ctime)
+        change_time = stat_info.st_ctime
+        change_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(change_time))
 
         # Modification date
         modification_time = stat_info.st_mtime
@@ -74,7 +89,11 @@ def analyze_file_metadata(filepath, threshold_days=30, expected_owner=None, expe
         permissions = stat.filemode(stat_info.st_mode)
 
         logging.info(f"Analyzing file: {filepath}")
-        logging.info(f"  Creation Date: {creation_date}")
+        if creation_date is not None:
+            logging.info(f"  Creation Date: {creation_date}")
+        else:
+            logging.info("  Creation Date: not available on this platform (no birth time; st_ctime is a change time, not a birth time)")
+        logging.info(f"  Change Date: {change_date}")
         logging.info(f"  Modification Date: {modification_date}")
         logging.info(f"  Access Date: {access_date}")
         logging.info(f"  File Size: {file_size} bytes")
@@ -88,6 +107,14 @@ def analyze_file_metadata(filepath, threshold_days=30, expected_owner=None, expe
 
         if age_in_days > threshold_days:
             logging.warning(f"  [ANOMALY] Modification date is older than {threshold_days} days.")
+
+        # The creation age is checked only from a real birth time. Where
+        # the platform provides none, there is no creation age to check,
+        # and the change time above is not a substitute for one.
+        if birth_time is not None:
+            creation_age_in_days = (current_time - birth_time) / (60 * 60 * 24)
+            if creation_age_in_days > threshold_days:
+                logging.warning(f"  [ANOMALY] Creation date is older than {threshold_days} days.")
 
         if expected_owner and str(owner_uid) != expected_owner:
             logging.warning(f"  [ANOMALY] Owner UID ({owner_uid}) does not match expected owner ({expected_owner}).")

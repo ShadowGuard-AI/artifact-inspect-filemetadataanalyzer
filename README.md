@@ -11,7 +11,7 @@ Analyzes file metadata (creation date, modification date, owner, permissions, et
 
 ## Parameters
 - `-h`: Show help message and exit
-- `-t`: Threshold in days for flagging old modification/creation dates. Defaults to 30 days.
+- `-t`: Threshold in days for flagging old dates. Defaults to 30 days. The modification date is always checked. The creation date is checked only where the platform provides a real birth time (`st_birthtime`, for example on macOS). On Linux there is no birth time in `os.stat`, and `st_ctime` is a change time, not a birth time, so no creation age is checked there; the change date is printed under its own name.
 - `-o`: Expected owner of the file. Flags if different.
 - `-p`: Expected permissions (e.g., 
 - `--pe_check`: Perform additional checks if the file is a PE executable.
