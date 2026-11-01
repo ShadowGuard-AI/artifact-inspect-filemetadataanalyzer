@@ -105,6 +105,12 @@ def analyze_file_metadata(filepath, threshold_days=30, expected_owner=None, expe
         age_in_seconds = current_time - modification_time
         age_in_days = age_in_seconds / (60 * 60 * 24)
 
+        # Old is the normal state of a stable file, so at the default
+        # 30 days this warning fires for nearly anything that has not
+        # been touched lately. It is a prompt to look, not a finding.
+        # The opposite direction is never checked: a modification
+        # date in the future, which is a genuine oddity, gives a
+        # negative age and passes quietly.
         if age_in_days > threshold_days:
             logging.warning(f"  [ANOMALY] Modification date is older than {threshold_days} days.")
 
@@ -116,6 +122,10 @@ def analyze_file_metadata(filepath, threshold_days=30, expected_owner=None, expe
             if creation_age_in_days > threshold_days:
                 logging.warning(f"  [ANOMALY] Creation date is older than {threshold_days} days.")
 
+        # The comparison is against the numeric UID as a string. The
+        # help text just says owner, so passing a user name, which is
+        # the natural reading, mismatches every file including the
+        # right one.
         if expected_owner and str(owner_uid) != expected_owner:
             logging.warning(f"  [ANOMALY] Owner UID ({owner_uid}) does not match expected owner ({expected_owner}).")
 
@@ -219,6 +229,9 @@ def main():
         sys.exit(1)
 
     if args.pe_check:
+        # The PE pass returns nothing and its failures stay inside it,
+        # so a file that is not a PE at all still exits 0 here. Only
+        # the metadata pass above owns this run's exit code.
         analyze_pe_metadata(args.filepath)
 
 
