@@ -3,164 +3,90 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Artifact Inspect Filemetadataanalyzer: what it is, how it runs, where it stops</title>
-<meta name="description" content="Artifact Inspect Filemetadataanalyzer is one of my projects. The README in the repo is short, so this page sticks to what the files themselves show.">
+<title>artifact-inspect-filemetadataanalyzer: Smuggler's Cove Lantern Signals</title>
+<meta name="description" content="Analyzes file metadata and flags anomalies based on heuristic rules or user defined thresholds.">
 <style>
-:root {
-  --bg: #160e1e; --panel: #24162e; --ink: #f0eaf4;
-  --mut: #301d3e;
-  --acc: #e874b2; --acc2: #74c8e8;
-  --line: #24162e;
-}
-* { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--ink);
-  font-family: Verdana, Geneva, sans-serif; line-height: 1.55; }
-code, pre, .mono { font-family: 'Lucida Console', monospace; }
-a { color: var(--acc2); }
-.hero { padding: 3rem 6vw 1rem; }
-.hero img.banner { width: 100%; height: auto; border: 1px solid var(--line);
-  border-radius: 10px; }
-.logo { width: 92px; height: 92px; border-radius: 18px;
-  border: 1px solid var(--line); }
-h1 { font-size: 2.4rem; margin: 0.4em 0 0.1em; }
-h2 { border-bottom: 2px solid var(--acc); padding-bottom: 0.2em;
-  margin-top: 2em; }
-.lede { font-size: 1.15rem; max-width: 62ch; }
-main { padding: 0 6vw 3rem; max-width: 1180px; margin: 0 auto; }
-.grid { display: grid; gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
-.card { background: var(--panel); border: 1px solid var(--line);
-  border-radius: 12px; padding: 1rem 1.2rem; }
-.card.pop { animation: rise 0.7s ease both; }
-@keyframes rise { from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: none; } }
-pre.code { background: #101014; color: #e8e6df; padding: 1rem 1.2rem;
-  border-radius: 12px; overflow-x: auto; font-size: 0.86rem;
-  border-left: 5px solid var(--acc); }
-table { border-collapse: collapse; width: 100%; }
-td, th { border-bottom: 1px solid var(--line); padding: 0.45rem 0.6rem;
-  text-align: left; }
-.shots { display: grid; gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-.shots img { width: 100%; height: auto; border: 1px solid var(--line);
-  border-radius: 10px; background: #f4f1e8; }
-footer { padding: 2rem 6vw; border-top: 1px solid var(--line);
-  color: var(--mut); }
-.rail { display: flex; gap: 1.2rem; align-items: flex-start; }
-.rail nav { position: sticky; top: 1rem; min-width: 180px; }
-@media (max-width: 760px) { .rail { flex-direction: column; }
-  .rail nav { position: static; } }
-@media (prefers-reduced-motion: reduce) {
-  .card.pop { animation: none; } * { scroll-behavior: auto; } }
+@font-face{font-family:'Cascadia Code';src:url('fonts/CascadiaCode.ttf') format('truetype');}
+@font-face{font-family:'Bitter';src:url('fonts/Bitter.ttf') format('truetype');}
+:root{--navy:#0e142c;--navy2:#131c3a;--grey:#9aa0a4;--parch:#c9ccce;--green:#5cff96;--gold:#c4a858;--ink:#14161c}
+*{box-sizing:border-box}body{margin:0;background:var(--navy);color:var(--parch);font-family:'Bitter',serif;line-height:1.65}
+h1,h2,h3{font-family:'Cascadia Code',monospace;color:var(--green)}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;background:var(--navy)}
+.hero img.heroimg{width:100%;height:58vh;object-fit:cover;display:block}
+.hero .in{padding:1rem 6vw 2rem;max-width:1120px;margin:0 auto;width:100%}
+.hero h1{font-size:1.45rem;word-break:break-all}
+.logo{width:200px;border:2px solid var(--gold)}
+main{padding:0 6vw 3rem;max-width:1120px;margin:0 auto}
+nav{display:flex;gap:.9rem;flex-wrap:wrap;margin:1.2rem 0}
+.lever{display:inline-flex;align-items:center;gap:.7rem;text-decoration:none;background:#6e7276;color:var(--green);font-family:'Cascadia Code',monospace;font-size:.88rem;padding:.55rem .8rem;opacity:.82;transition:transform .1s,opacity .12s}
+.lever::after{content:'';width:16px;height:16px;border-radius:50%;background:var(--gold);flex:none}
+.lever:hover{opacity:1;transform:rotate(1.6deg)}
+.lever:active{transform:rotate(4deg)}
+.lever:focus-visible{outline:none;text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:5px}
+.parcel{background:linear-gradient(#c2c5c7,#b4b8ba);color:var(--ink);padding:0 1.5rem 1.3rem;margin:1.8rem 0;position:relative;border-right:3px dashed #7d8185}
+.parcel::before{content:'';display:block;margin:0 -1.5rem 1rem;height:26px;background:#83878b}
+.parcel h2{color:var(--ink);background:transparent;margin-top:0}
+.parcel h2:first-of-type{margin-top:-.2rem}
+pre{background:var(--navy2);color:var(--parch);padding:1rem;overflow-x:auto}
+a{color:#7a5c14}
+a::before{content:'';display:inline-block;width:20px;height:2px;margin-right:.5em;background:linear-gradient(90deg,#cfdce8 0 42%,transparent 42% 58%,#cfdce8 58%);vertical-align:4px}
+a:hover::before{background:#cfdce8}
+.lever::before{content:none}
+.swell{height:22px;margin:2.2rem 0;background:radial-gradient(circle at 50% -6px,transparent 15px,var(--grey) 15px,var(--grey) 17px,transparent 17px);background-size:120px 22px;background-repeat:repeat-x;position:relative}
+.row{display:flex;gap:1rem;padding:.5rem 0;border-bottom:1px solid #8b8f93}
+.row b{font-family:'Cascadia Code',monospace;min-width:104px}
+footer{padding:1rem 6vw 2.4rem;max-width:1120px;margin:0 auto}
 </style>
 </head>
-<body class="layout-split">
-<!-- This page exists for artifact-inspect-filemetadataanalyzer alone: the layout (split-hero),
-     the colors, and the type were picked for this project, not
-     shared with the other project pages. The code block below is
-     copied from the file it names, line for line. If it looks
-     plain, that is because the project is plain, and I would
-     rather the page match the project than dress it up. The one
-     thing I will not do here is oversell: what this project does
-     not do is stated on the page, not hidden from it. -->
+<body>
 <header class="hero">
-  <img class="logo" src="assets/logo.png" alt="Artifact Inspect Filemetadataanalyzer logo">
-  <img class="banner" src="assets/banner.png" alt="">
-  <h1>Artifact Inspect Filemetadataanalyzer</h1>
-  <p class="mono"><a href="https://github.com/ShadowGuard-AI/artifact-inspect-filemetadataanalyzer">github.com/ShadowGuard-AI/artifact-inspect-filemetadataanalyzer</a></p>
+<img class="heroimg" src="assets/intro-banner.png" alt="A shuttered lantern lit in a dark cove, green light on wet shingle, an unlit boat beyond the breakers, no text">
+<div class="in">
+<img class="logo" src="assets/logo.png" alt="A half shuttered signal lantern with one green lit slit and its lever out at the side, above the project name in rope gold">
+<h1>artifact-inspect-filemetadataanalyzer</h1>
+<p>A signal station log kept through one night watch. Each entry is timed by its place in the log rather than by a number.</p>
+<nav>
+<a class="lever" href="#watch">open the watch</a>
+<a class="lever" href="#dates">check the dates</a>
+<a class="lever" href="#book">name the owner</a>
+<a class="lever" href="#book">set the permissions</a>
+<a class="lever" href="#book">run the PE check</a>
+</nav>
+</div>
 </header>
-
 <main>
-  <section class="rail">
-    <nav aria-label="on this page">
-      <p class="mono"><a href="#run">Run it</a><br>
-      <a href="#files">The files</a><br>
-      <a href="#sheets">The sheets</a><br>
-      <a href="https://github.com/ShadowGuard-AI/artifact-inspect-filemetadataanalyzer">The repo</a></p>
-    </nav>
-    <div>
-      <p class="lede">Artifact Inspect Filemetadataanalyzer is one of my projects. The README in the repo is short, so this page sticks to what the files themselves show.</p>
-      <div class="grid">
-        <div class="card pop"><h3>What it is</h3>
-          <p>Artifact Inspect Filemetadataanalyzer: 5 files, 221 counted
-          lines across Python 199, Markdown 20, Text 2. One job, done in the
-          open, in files you can read.</p></div>
-        <div class="card pop"><h3>The biggest piece</h3>
-          <p><code>main.py</code> carries the most
-          lines. If the project grows, that file is where the growth
-          lands first, for better or worse.</p></div>
-        <div class="card pop"><h3>The honest gap</h3>
-          <p>No test files yet. That is the honest gap, and the roadmap in the visuals folder says what the first one should cover.</p></div>
-      </div>
-      <section id="run">
-        <h2>Run it</h2>
-        <p>The repo README has the exact commands for this one. The
-        shape is the shape for most of my projects: clone it, read the
-        top file first so you know what will happen, then run it on
-        something you do not mind breaking.</p>
-        <p class="mono">$ git clone https://github.com/ShadowGuard-AI/artifact-inspect-filemetadataanalyzer.git<br>$ cd artifact-inspect-filemetadataanalyzer</p>
-      </section>
-      
-  <section aria-label="real code">
-    <h2>The code, as it sits in the repo</h2>
-    <p>From <code>main.py</code>, line 10 on. I did
-    not tidy it for the page. What you see is what the file has.</p>
-    <pre class="code"><code>logging.basicConfig(level=logging.INFO, format=&#x27;%(asctime)s - %(levelname)s - %(message)s&#x27;)
-
-def setup_argparse():
-    &quot;&quot;&quot;
-    Sets up the argument parser for the command-line interface.
-    &quot;&quot;&quot;
-    parser = argparse.ArgumentParser(description=&quot;Analyzes file metadata and flags anomalies.&quot;)
-    parser.add_argument(&quot;filepath&quot;, help=&quot;Path to the file to analyze.&quot;)
-    parser.add_argument(&quot;-t&quot;, &quot;--threshold&quot;, type=int, default=30,
-                        help=&quot;Threshold in days for flagging old modification/creation dates. Defaults to 30 days.&quot;)
-    parser.add_argument(&quot;-o&quot;, &quot;--owner&quot;, type=str,
-                        help=&quot;Expected owner of the file. Flags if different.&quot;)
-    parser.add_argument(&quot;-p&quot;, &quot;--permissions&quot;, type=str,
-                        help=&quot;Expected permissions (e.g., &#x27;rwxr-xr--&#x27;). Flags if different.&quot;)
-    parser.add_argument(&quot;--pe_check&quot;, action=&quot;store_true&quot;,
-                        help=&quot;Perform additional checks if the file is a PE executable.&quot;)
-    return parser.parse_args()
-
-
-def analyze_file_metadata(filepath, threshold_days=30, expected_owner=None, expected_permissions=None):
-    &quot;&quot;&quot;
-    Analyzes file metadata and flags anomalies based on provided thresholds and expectations.</code></pre>
-  </section>
-      <section id="files">
-        <h2>The files that matter</h2>
-        <table><tr><th>File</th><th>Lines</th></tr>
-        <tr><td><code>main.py</code></td><td>199</td></tr>
-        <tr><td><code>README.md</code></td><td>20</td></tr>
-        <tr><td><code>requirements.txt</code></td><td>2</td></tr>
-        <tr><td><code>banner.png</code></td><td>0</td></tr>
-        <tr><td><code>logo.png</code></td><td>0</td></tr>
-        </table>
-        <p>Names doing the work: <span class="mono">setup_argparse, analyze_file_metadata, analyze_pe_metadata, main</span>.</p>
-      </section>
-      <section id="sheets">
-        <h2>Drawn by hand</h2>
-        <p>I sketch my projects on notebook paper so I have to
-        understand them well enough to draw them. The full set,
-        with the counts and how they were counted, is the
-        <a href="https://github.com/ShadowGuard-AI/artifact-inspect-filemetadataanalyzer/tree/main/artifact-inspect-filemetadataanalyzer-Visuals">artifact-inspect-filemetadataanalyzer-Visuals</a>
-        folder in the repo. Nothing is drawn over the binder holes.
-        That is a rule, not a style.</p>
-        <div class="shots">
-          <img src="assets/architecture.png" alt="Hand drawn architecture sheet for Artifact Inspect Filemetadataanalyzer">
-          <img src="assets/flowchart.png" alt="Hand drawn flowchart sheet for Artifact Inspect Filemetadataanalyzer">
-          <img src="assets/product-map.png" alt="Hand drawn product map sheet for Artifact Inspect Filemetadataanalyzer">
-        </div>
-      </section>
-    </div>
-  </section>
+<section class="parcel" id="watch"><h2>First Entry: The Watch Itself</h2>
+<p>artifact-inspect-filemetadataanalyzer analyzes file metadata, giving as its examples creation date, modification date, owner, permissions, and the open ended etcetera the source itself uses, and flags anomalies based on heuristic rules or user defined thresholds. It uses the os and stat modules, and those two module names are the whole of the machinery the source names.</p>
+<p>Its stated focus: it analyzes file artifacts such as executables and documents to identify potential security risks, suspicious patterns, and embedded threats by extracting metadata and performing static analysis, focusing on characteristics indicative of malware or malicious code.</p>
+</section>
+<div class="swell"></div>
+<section class="parcel" id="dates"><h2>Second Entry: The Date Check</h2>
+<p>-t sets the threshold in days for flagging old dates and defaults to 30 days. The modification date is always checked. The creation date is checked only where the platform provides a real birth time, st_birthtime, for example on macOS. On Linux there is no birth time in os.stat, and st_ctime is a change time, not a birth time, so no creation age is checked there, and the change date is printed under its own name.</p>
+<p>This entry is not shortened, because a Linux reader who was promised a creation check the program cannot make there would be misled by any shorter version.</p>
+</section>
+<div class="swell"></div>
+<section class="parcel" id="cove"><h2>Third Entry: Getting to the Cove</h2>
+<pre>git clone https://github.com/ShadowGuardAI/artifact-inspect-filemetadataanalyzer</pre>
+<pre>./artifact-inspect-filemetadataanalyzer [params]</pre>
+<p>Watch note: none of the documented controls names the file whose metadata is to be analyzed, so how that file is handed to the program is not spelled out in the source.</p>
+<p><a href="https://github.com/ShadowGuard-AI/artifact-inspect-filemetadataanalyzer">The repository on GitHub</a></p>
+</section>
+<div class="swell"></div>
+<section class="parcel" id="book"><h2>Fourth Entry: The Rest of the Signal Book</h2>
+<div class="row"><b>-h</b><span>Shows a help message and exits.</span></div>
+<div class="row"><b>-t</b><span>Sets the threshold in days for flagging old dates and defaults to 30 days, with the full platform qualification in the second entry.</span></div>
+<div class="row"><b>-o</b><span>Gives the expected owner of the file and flags if different.</span></div>
+<div class="row"><b>-p</b><span>Gives the expected permissions, and its entry stops there, because the source entry for -p itself breaks off after the opening of an example, at the words e.g. with nothing following. This page reproduces that break rather than guessing an example value.</span></div>
+<div class="row"><b>--pe_check</b><span>Performs additional checks if the file is a PE executable, and the source does not say what those additional checks are, which this entry also states.</span></div>
+</section>
+<div class="swell"></div>
+<section class="parcel"><h2>Last Entry: Before the Lamp Is Shuttered</h2>
+<p>The outcome the source supports is a flag raised when a heuristic rule or a threshold says a value looks anomalous, with age, owner, and permissions as the checked grounds it names.</p>
+<p>No sample output, example file, example flag, or list of the heuristic rules themselves appears in the source, and this log says exactly that.</p>
+<pre>Copyright (c) ShadowGuardAI</pre>
+<p>No licence is named on that line.</p>
+</section>
 </main>
-<footer>
-  <p>Artifact Inspect Filemetadataanalyzer is one of my projects. This page was written
-  from the repo itself on 2026-10-30: the counts are the
-  repo's counts, the code is the repo's code, and the gaps are the
-  repo's gaps.</p>
-</footer>
+<footer><p>Theme: Smuggler's Cove Lantern Signals. Type: Cascadia Code for headings, Bitter for reading, both SIL Open Font License 1.1. The lettering reference Karmatic Arcade was reference only and is not embedded.</p></footer>
 </body>
 </html>
