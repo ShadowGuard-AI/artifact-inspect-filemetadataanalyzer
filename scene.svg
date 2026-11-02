@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="1200" height="300" role="img" aria-label="The cove at night: a boat riding a slow swell beyond the breakers, a shuttered lantern signalling in long and short exposures, green light shivering in a rock hollow">
+<rect width="1200" height="300" fill="#0e142c"/>
+<rect y="0" width="1200" height="90" fill="#161e38"/>
+<g><animateTransform attributeName="transform" type="translate" values="0,0;0,5;0,0" dur="9s" repeatCount="indefinite"/>
+<polygon points="760,120 940,120 910,140 790,140" fill="#5f6468"/><line x1="850" y1="120" x2="850" y2="58" stroke="#4c5054" stroke-width="4">
+<animate attributeName="x2" values="850;862;850" dur="9s" repeatCount="indefinite"/></line></g>
+<g stroke="#cfdce8" stroke-width="3" fill="none"><path d="M240,168 q60,-8 120,0 t120,0 t120,0"><animate attributeName="opacity" values="0.9;0.15;0.9" dur="7s" repeatCount="indefinite"/></path>
+<path d="M300,196 q60,-8 120,0 t120,0"><animate attributeName="opacity" values="0.2;0.8;0.2" dur="11s" repeatCount="indefinite"/></path></g>
+<polygon points="60,300 340,300 320,238 90,238" fill="#3c3e42"/>
+<rect x="130" y="128" width="110" height="112" fill="#6e7276" stroke="#2e3032" stroke-width="4"/>
+<polygon points="200,168 214,196 200,224 188,196" fill="#96ff98"/>
+<polygon points="186,140 246,146 240,240 186,240" fill="#0e142c">
+<animate attributeName="points" values="186,140 246,146 240,240 186,240;150,140 190,146 186,240 150,240;186,140 246,146 240,240 186,240;186,140 246,146 240,240 186,240" keyTimes="0;0.2;0.45;1" dur="13s" repeatCount="indefinite"/></polygon>
+<polygon points="238,168 560,196 560,232 238,196" fill="#5cff96" opacity="0.28">
+<animate attributeName="opacity" values="0.3;0.1;0.3;0.3" keyTimes="0;0.2;0.45;1" dur="13s" repeatCount="indefinite"/></polygon>
+<line x1="240" y1="182" x2="282" y2="162" stroke="#999da1" stroke-width="6"/><circle cx="288" cy="158" r="9" fill="#c4a858"/>
+<ellipse cx="430" cy="278" rx="90" ry="14" fill="#123c2a"/>
+<g stroke="#78ffb0" stroke-width="2" fill="none" opacity="0.8"><path d="M370,276 q14,-6 28,0 t28,0 t28,0 t28,0"><animate attributeName="opacity" values="0.3;0.95;0.3" dur="5s" repeatCount="indefinite"/></path></g>
+<g transform="translate(1090,238)"><g><animateTransform attributeName="transform" type="rotate" values="0;7;0" dur="17s" repeatCount="indefinite"/><ellipse cx="0" cy="0" rx="11" ry="7" fill="none" stroke="#96989a" stroke-width="3"/></g></g>
+<g stroke="#96989a" stroke-width="3" fill="none"><ellipse cx="1064" cy="222" rx="11" ry="7"/><ellipse cx="1078" cy="230" rx="11" ry="7"/></g>
+</svg>
