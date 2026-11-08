@@ -3,90 +3,95 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>artifact-inspect-filemetadataanalyzer: Smuggler's Cove Lantern Signals</title>
-<meta name="description" content="Analyzes file metadata and flags anomalies based on heuristic rules or user defined thresholds.">
+<title>artifact-inspect-filemetadataanalyzer: The Bin Card</title>
 <style>
-@font-face{font-family:'Cascadia Code';src:url('fonts/CascadiaCode.ttf') format('truetype');}
-@font-face{font-family:'Bitter';src:url('fonts/Bitter.ttf') format('truetype');}
-:root{--navy:#0e142c;--navy2:#131c3a;--grey:#9aa0a4;--parch:#c9ccce;--green:#5cff96;--gold:#c4a858;--ink:#14161c}
-*{box-sizing:border-box}body{margin:0;background:var(--navy);color:var(--parch);font-family:'Bitter',serif;line-height:1.65}
-h1,h2,h3{font-family:'Cascadia Code',monospace;color:var(--green)}
-.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;background:var(--navy)}
-.hero img.heroimg{width:100%;height:58vh;object-fit:cover;display:block}
-.hero .in{padding:1rem 6vw 2rem;max-width:1120px;margin:0 auto;width:100%}
-.hero h1{font-size:1.45rem;word-break:break-all}
-.logo{width:200px;border:2px solid var(--gold)}
-main{padding:0 6vw 3rem;max-width:1120px;margin:0 auto}
-nav{display:flex;gap:.9rem;flex-wrap:wrap;margin:1.2rem 0}
-.lever{display:inline-flex;align-items:center;gap:.7rem;text-decoration:none;background:#6e7276;color:var(--green);font-family:'Cascadia Code',monospace;font-size:.88rem;padding:.55rem .8rem;opacity:.82;transition:transform .1s,opacity .12s}
-.lever::after{content:'';width:16px;height:16px;border-radius:50%;background:var(--gold);flex:none}
-.lever:hover{opacity:1;transform:rotate(1.6deg)}
-.lever:active{transform:rotate(4deg)}
-.lever:focus-visible{outline:none;text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:5px}
-.parcel{background:linear-gradient(#c2c5c7,#b4b8ba);color:var(--ink);padding:0 1.5rem 1.3rem;margin:1.8rem 0;position:relative;border-right:3px dashed #7d8185}
-.parcel::before{content:'';display:block;margin:0 -1.5rem 1rem;height:26px;background:#83878b}
-.parcel h2{color:var(--ink);background:transparent;margin-top:0}
-.parcel h2:first-of-type{margin-top:-.2rem}
-pre{background:var(--navy2);color:var(--parch);padding:1rem;overflow-x:auto}
-a{color:#7a5c14}
-a::before{content:'';display:inline-block;width:20px;height:2px;margin-right:.5em;background:linear-gradient(90deg,#cfdce8 0 42%,transparent 42% 58%,#cfdce8 58%);vertical-align:4px}
-a:hover::before{background:#cfdce8}
-.lever::before{content:none}
-.swell{height:22px;margin:2.2rem 0;background:radial-gradient(circle at 50% -6px,transparent 15px,var(--grey) 15px,var(--grey) 17px,transparent 17px);background-size:120px 22px;background-repeat:repeat-x;position:relative}
-.row{display:flex;gap:1rem;padding:.5rem 0;border-bottom:1px solid #8b8f93}
-.row b{font-family:'Cascadia Code',monospace;min-width:104px}
-footer{padding:1rem 6vw 2.4rem;max-width:1120px;margin:0 auto}
+@font-face { font-family: "Ribeye"; src: url("fonts/Ribeye-400.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "Taviraj"; src: url("fonts/Taviraj-400.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "Taviraj"; src: url("fonts/Taviraj-700.woff2") format("woff2"); font-weight: 700; }
+:root {
+  --paper: #fffdf8; --stone: #efe9dd; --ink: #2c2620; --soft: #6f6455;
+  --wine: #7a2233; --brass: #9a7b2d; --line: #ddd2bd; --card: #fbf8f1;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--stone); color: var(--ink); font-family: "Taviraj", serif; font-size: 17.5px; line-height: 1.55; }
+.wrap { max-width: 960px; margin: 0 auto; padding: 0 20px 64px; }
+header.hero { text-align: center; padding: 40px 0 8px; }
+h1, h2 { font-family: "Ribeye", serif; font-weight: 400; line-height: 1.15; }
+h1 { font-size: clamp(26px, 4.6vw, 42px); margin: 18px 0 6px; }
+h2 { font-size: 26px; margin: 0 0 12px; border-bottom: 2px solid var(--line); padding-bottom: 7px; }
+.tagline { color: var(--soft); font-size: 19px; margin: 0 auto; max-width: 660px; }
+.btns { margin: 22px 0 6px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+a.btn { font-family: "Ribeye", serif; text-decoration: none; padding: 11px 22px; border-radius: 999px; border: 2px solid var(--brass); color: var(--brass); background: transparent; }
+a.btn.solid { background: var(--wine); border-color: var(--wine); color: #fff; }
+figure { margin: 26px 0; }
+figure img { width: 100%; border-radius: 10px; display: block; box-shadow: 0 8px 28px rgba(44,38,32,.22); }
+figcaption { color: var(--soft); font-size: 15.5px; text-align: center; margin-top: 9px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 34px 0; }
+.fact { background: var(--card); border: 1px solid var(--line); border-top: 5px solid var(--wine); border-radius: 8px; padding: 14px 16px; }
+.fact b { display: block; font-family: "Ribeye", serif; font-weight: 400; font-size: 15px; letter-spacing: .04em; text-transform: uppercase; color: var(--brass); margin-bottom: 4px; }
+section { margin: 38px 0; }
+code, pre { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+pre { background: #2e2118; color: #f6ecd9; padding: 15px 18px; border-radius: 8px; overflow-x: auto; font-size: 15px; }
+table { border-collapse: collapse; width: 100%; background: var(--card); }
+th, td { border: 1px solid var(--line); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { font-family: "Ribeye", serif; font-weight: 400; background: var(--stone); }
+.hold { background: #f9eef0; border: 1px solid #e6c3ca; border-left: 6px solid var(--wine); border-radius: 8px; padding: 16px 20px; }
+.hold h2 { border: none; padding: 0; }
+.hold ul { margin: 8px 0 4px; padding-left: 20px; }
+footer { margin-top: 52px; border-top: 2px solid var(--line); padding-top: 16px; color: var(--soft); font-size: 15px; text-align: center; }
 </style>
 </head>
 <body>
+<div class="wrap">
 <header class="hero">
-<img class="heroimg" src="assets/intro-banner.png" alt="A shuttered lantern lit in a dark cove, green light on wet shingle, an unlit boat beyond the breakers, no text">
-<div class="in">
-<img class="logo" src="assets/logo.png" alt="A half shuttered signal lantern with one green lit slit and its lever out at the side, above the project name in rope gold">
-<h1>artifact-inspect-filemetadataanalyzer</h1>
-<p>A signal station log kept through one night watch. Each entry is timed by its place in the log rather than by a number.</p>
-<nav>
-<a class="lever" href="#watch">open the watch</a>
-<a class="lever" href="#dates">check the dates</a>
-<a class="lever" href="#book">name the owner</a>
-<a class="lever" href="#book">set the permissions</a>
-<a class="lever" href="#book">run the PE check</a>
-</nav>
-</div>
+  <figure>
+    <img src="assets/banner.png" alt="A vaulted stone wine cellar: a keeper holding a lit lantern over rows of dusty bottles in wooden bins, each bin fronted by a cream card whose handwriting stays blurred, and a second keeper holding a card stamped with a red wax seal at the right">
+  </figure>
+  <h1>artifact-inspect-filemetadataanalyzer</h1>
+  <p class="tagline">The Bin Card. Analyzes file metadata (creation date, modification date, owner, permissions, and more) and flags anomalies based on heuristic rules or user-defined thresholds, using the os and stat modules.</p>
+  <div class="btns">
+    <a class="btn solid" href="https://github.com/ShadowGuard-AI/artifact-inspect-filemetadataanalyzer">The repository</a>
+    <a class="btn" href="https://github.com/ShadowGuard-AI/artifact-inspect-filemetadataanalyzer/blob/main/main.py">main.py</a>
+  </div>
 </header>
-<main>
-<section class="parcel" id="watch"><h2>First Entry: The Watch Itself</h2>
-<p>artifact-inspect-filemetadataanalyzer analyzes file metadata, giving as its examples creation date, modification date, owner, permissions, and the open ended etcetera the source itself uses, and flags anomalies based on heuristic rules or user defined thresholds. It uses the os and stat modules, and those two module names are the whole of the machinery the source names.</p>
-<p>Its stated focus: it analyzes file artifacts such as executables and documents to identify potential security risks, suspicious patterns, and embedded threats by extracting metadata and performing static analysis, focusing on characteristics indicative of malware or malicious code.</p>
+
+<div class="facts">
+  <div class="fact"><b>Reads</b>Dates, owner, and permissions, for any file</div>
+  <div class="fact"><b>Threshold</b>30 days by default for flagging old dates, set with -t</div>
+  <div class="fact"><b>Extra check</b>--pe_check adds PE-specific checks for PE executables</div>
+  <div class="fact"><b>Licence</b>MIT License, see LICENSE in the repository</div>
+</div>
+
+<section>
+  <h2>Usage</h2>
+  <pre>./artifact-inspect-filemetadataanalyzer [params]</pre>
+  <table>
+    <tr><th>Parameter</th><th>What it does</th></tr>
+    <tr><td><code>-h</code></td><td>Show help message and exit.</td></tr>
+    <tr><td><code>-t</code></td><td>Threshold in days for flagging old dates. Defaults to 30 days.</td></tr>
+    <tr><td><code>-o</code></td><td>Expected owner of the file. Flags if different.</td></tr>
+    <tr><td><code>-p</code></td><td>Expected permissions. The entry in the source breaks off after the opening of an example, at the words "e.g." with nothing following; no example value is guessed here.</td></tr>
+    <tr><td><code>--pe_check</code></td><td>Perform additional checks if the file is a PE executable.</td></tr>
+  </table>
 </section>
-<div class="swell"></div>
-<section class="parcel" id="dates"><h2>Second Entry: The Date Check</h2>
-<p>-t sets the threshold in days for flagging old dates and defaults to 30 days. The modification date is always checked. The creation date is checked only where the platform provides a real birth time, st_birthtime, for example on macOS. On Linux there is no birth time in os.stat, and st_ctime is a change time, not a birth time, so no creation age is checked there, and the change date is printed under its own name.</p>
-<p>This entry is not shortened, because a Linux reader who was promised a creation check the program cannot make there would be misled by any shorter version.</p>
+
+<section>
+  <h2>What the card records</h2>
+  <p>Every inspected file gets the keeper's reading: its dates, its owner, and its permissions, checked against the threshold and any expected values given on the command line. The declared dependencies are python-magic and pefile, alongside the standard library's os and stat.</p>
 </section>
-<div class="swell"></div>
-<section class="parcel" id="cove"><h2>Third Entry: Getting to the Cove</h2>
-<pre>git clone https://github.com/ShadowGuardAI/artifact-inspect-filemetadataanalyzer</pre>
-<pre>./artifact-inspect-filemetadataanalyzer [params]</pre>
-<p>Watch note: none of the documented controls names the file whose metadata is to be analyzed, so how that file is handed to the program is not spelled out in the source.</p>
-<p><a href="https://github.com/ShadowGuard-AI/artifact-inspect-filemetadataanalyzer">The repository on GitHub</a></p>
+
+<section class="hold">
+  <h2>Stated limits</h2>
+  <ul>
+    <li>The modification date is always checked. The creation date is checked only where the platform provides a real birth time (st_birthtime, for example on macOS).</li>
+    <li>On Linux there is no birth time in os.stat, and st_ctime is a change time, not a birth time, so no creation age is checked there; the change date is printed under its own name.</li>
+    <li>The tool inspects any file's metadata. Only the --pe_check addition is specific to PE executables.</li>
+  </ul>
 </section>
-<div class="swell"></div>
-<section class="parcel" id="book"><h2>Fourth Entry: The Rest of the Signal Book</h2>
-<div class="row"><b>-h</b><span>Shows a help message and exits.</span></div>
-<div class="row"><b>-t</b><span>Sets the threshold in days for flagging old dates and defaults to 30 days, with the full platform qualification in the second entry.</span></div>
-<div class="row"><b>-o</b><span>Gives the expected owner of the file and flags if different.</span></div>
-<div class="row"><b>-p</b><span>Gives the expected permissions, and its entry stops there, because the source entry for -p itself breaks off after the opening of an example, at the words e.g. with nothing following. This page reproduces that break rather than guessing an example value.</span></div>
-<div class="row"><b>--pe_check</b><span>Performs additional checks if the file is a PE executable, and the source does not say what those additional checks are, which this entry also states.</span></div>
-</section>
-<div class="swell"></div>
-<section class="parcel"><h2>Last Entry: Before the Lamp Is Shuttered</h2>
-<p>The outcome the source supports is a flag raised when a heuristic rule or a threshold says a value looks anomalous, with age, owner, and permissions as the checked grounds it names.</p>
-<p>No sample output, example file, example flag, or list of the heuristic rules themselves appears in the source, and this log says exactly that.</p>
-<pre>Copyright (c) ShadowGuardAI</pre>
-<p>No licence is named on that line.</p>
-</section>
-</main>
-<footer><p>Theme: Smuggler's Cove Lantern Signals. Type: Cascadia Code for headings, Bitter for reading, both SIL Open Font License 1.1. The lettering reference Karmatic Arcade was reference only and is not embedded.</p></footer>
+
+<footer>
+  <p>artifact-inspect-filemetadataanalyzer is released under the MIT License. See LICENSE in the repository. Site type is set in Ribeye and Taviraj, self-hosted under the SIL Open Font License.</p>
+</footer>
+</div>
 </body>
 </html>
