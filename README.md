@@ -1,6 +1,10 @@
+![A blank cream bin card with deckled edges clipped to a wooden bin front in lamplight, a red wax seal at its top corner and the keeper's brass oil lamp at the left, rows of unlabelled bottles stacked soft behind](intro-banner.png)
+
 # artifact-inspect-filemetadataanalyzer
 
 ![A vaulted stone wine cellar: a keeper holding a lit lantern over rows of dusty bottles in wooden bins, each bin fronted by a cream card whose handwriting stays blurred, and a second keeper holding a card stamped with a red wax seal at the right](banner.png)
+
+![A completely blank cream card in a plain brass frame screwed to a steeply angled wooden bin front, a red wax seal stamped with a bunch of grapes at its lower corner, corked bottles lying in the racks behind, the heading plate](logo.png)
 
 ![The cove in three planes: the boat on the swell, the lantern shutter opening and closing, green light shivering in the rock hollow](scene.svg)
 

@@ -15,7 +15,8 @@
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--stone); color: var(--ink); font-family: "Taviraj", serif; font-size: 17.5px; line-height: 1.55; }
 .wrap { max-width: 960px; margin: 0 auto; padding: 0 20px 64px; }
-header.hero { text-align: center; padding: 40px 0 8px; }
+header.hero { text-align: center; padding: 52px 0 8px; }
+img.hero-logo { width: min(430px, 82vw); border-radius: 10px; box-shadow: 0 8px 28px rgba(44,38,32,.22); }
 h1, h2 { font-family: "Ribeye", serif; font-weight: 400; line-height: 1.15; }
 h1 { font-size: clamp(26px, 4.6vw, 42px); margin: 18px 0 6px; }
 h2 { font-size: 26px; margin: 0 0 12px; border-bottom: 2px solid var(--line); padding-bottom: 7px; }
@@ -44,9 +45,7 @@ footer { margin-top: 52px; border-top: 2px solid var(--line); padding-top: 16px;
 <body>
 <div class="wrap">
 <header class="hero">
-  <figure>
-    <img src="assets/banner.png" alt="A vaulted stone wine cellar: a keeper holding a lit lantern over rows of dusty bottles in wooden bins, each bin fronted by a cream card whose handwriting stays blurred, and a second keeper holding a card stamped with a red wax seal at the right">
-  </figure>
+  <img class="hero-logo" src="assets/logo.png" alt="A completely blank cream card in a plain brass frame screwed to a steeply angled wooden bin front, a red wax seal stamped with a bunch of grapes at its lower corner, corked bottles lying in the racks behind">
   <h1>artifact-inspect-filemetadataanalyzer</h1>
   <p class="tagline">The Bin Card. Analyzes file metadata (creation date, modification date, owner, permissions, and more) and flags anomalies based on heuristic rules or user-defined thresholds, using the os and stat modules.</p>
   <div class="btns">
@@ -54,6 +53,16 @@ footer { margin-top: 52px; border-top: 2px solid var(--line); padding-top: 16px;
     <a class="btn" href="https://github.com/ShadowGuard-AI/artifact-inspect-filemetadataanalyzer/blob/main/main.py">main.py</a>
   </div>
 </header>
+
+<figure>
+  <img src="assets/intro-banner.png" alt="A blank cream bin card with deckled edges clipped to a wooden bin front in lamplight, a red wax seal at its top corner and the keeper's brass oil lamp at the left, rows of unlabelled bottles stacked soft behind">
+  <figcaption>The closer look, by lamplight: every bin carries its card, and every file gets the same reading, its dates, its owner, and its permissions checked against the threshold.</figcaption>
+</figure>
+
+<figure>
+  <img src="assets/banner.png" alt="A vaulted stone wine cellar: a keeper holding a lit lantern over rows of dusty bottles in wooden bins, each bin fronted by a cream card whose handwriting stays blurred, and a second keeper holding a card stamped with a red wax seal at the right">
+  <figcaption>Bin after bin, the same inspection: the keeper reads each card the way the tool reads each file, and flags what does not sit right.</figcaption>
+</figure>
 
 <div class="facts">
   <div class="fact"><b>Reads</b>Dates, owner, and permissions, for any file</div>
