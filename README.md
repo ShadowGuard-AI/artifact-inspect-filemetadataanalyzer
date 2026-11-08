@@ -1,10 +1,6 @@
-![The cove with the lantern lit and every readable thing removed: green light on wet shingle, an unlit boat beyond the breakers, cliffs under cloud](intro-banner.png)
-
 # artifact-inspect-filemetadataanalyzer
 
-![The cove after dark at full width: the shuttered lantern throwing its beam, the cove stores, and the project name notched in rope gold on the board across the cave mouth](banner.png)
-
-![A half shuttered signal lantern with its green slit and lever out, the heading plate](logo.png)
+![A vaulted stone wine cellar: a keeper holding a lit lantern over rows of dusty bottles in wooden bins, each bin fronted by a cream card whose handwriting stays blurred, and a second keeper holding a card stamped with a red wax seal at the right](banner.png)
 
 ![The cove in three planes: the boat on the swell, the lantern shutter opening and closing, green light shivering in the rock hollow](scene.svg)
 
