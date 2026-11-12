@@ -9,8 +9,7 @@
 ![The cove in three planes: the boat on the swell, the lantern shutter opening and closing, green light shivering in the rock hollow](scene.svg)
 
 
-# artifact-inspect-FileMetadataAnalyzer
-Analyzes file metadata (creation date, modification date, owner, permissions, etc.) and flags anomalies based on heuristic rules or user-defined thresholds. Uses `os` and `stat` modules. - Focused on Analyzes file artifacts (e.g., executables, documents) to identify potential security risks, suspicious patterns, and embedded threats by extracting metadata and performing static analysis. Focuses on identifying characteristics indicative of malware or malicious code.
+Analyzes file metadata (creation date, modification date, owner, permissions, etc.) and flags anomalies based on heuristic rules or user-defined thresholds. Uses `os` and `stat` modules, focusing on analyzing file artifacts (e.g., executables, documents) to identify potential security risks, suspicious patterns, and embedded threats by extracting metadata and performing static analysis. Focuses on identifying characteristics indicative of malware or malicious code.
 
 ![Section divider](sep-light.svg)
 
